@@ -1,3 +1,7 @@
+2013-01-01 Matt Turner <mattst88@gentoo.org>
+
+	* modules/opengl.eselect: switch GLES3, bug #444114.
+
 2012-03-08  Ulrich Müller  <ulm@gentoo.org>
 
 	* modules/esd.eselect (VERSION):

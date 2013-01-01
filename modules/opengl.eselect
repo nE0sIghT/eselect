@@ -250,10 +250,11 @@ set_new_implementation() {
 		gl_header[GL]="gl.h glx.h glxtokens.h glext.h glxext.h glxmd.h glxproto.h"
 		gl_header[GLES]="egl.h gl_extensions.h glext.h gl.h glplatform.h"
 		gl_header[GLES2]="gl2ext.h gl2.h gl2platform.h"
+		gl_header[GLES3]="gl3ext.h gl3.h gl3platform.h"
 		gl_header[EGL]="eglext.h egl.h eglplatform.h"
 		gl_header[KHR]="khrplatform.h"
 		gl_header[VG]="openvg.h vgext.h vgplatform.h vgu.h"
-		for gl_dir in {EGL,GL,GLES,GLES2,KHR,VG}; do
+		for gl_dir in {EGL,GL,GLES,GLES2,GLES3,KHR,VG}; do
 			setup_includes_symlinks \
 			"${DST_PREFIX}/include/${gl_dir}" \
 				"${gl_header[${gl_dir}]}" \
