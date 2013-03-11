@@ -1,5 +1,5 @@
 # -*-eselect-*-  vim: ft=eselect
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Manage the XvMC implementation used by your system"
@@ -9,9 +9,9 @@ VERSION=$(svn_date_to_version "${SVN_DATE}" )
 
 init_XVMC_vars() {
 	get_libname() {
-	[[ $(uname) == "Darwin" ]] \
-		&& echo ${1:+.}${1}.dylib \
-		|| echo .so${1:+.}${1}
+		[[ $(uname) == "Darwin" ]] \
+			&& echo ${1:+.}${1}.dylib \
+			|| echo .so${1:+.}${1}
 	}
 
 	XVMCLIBS=(
