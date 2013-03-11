@@ -7,36 +7,41 @@ MAINTAINER="cardoe@gentoo.org"
 SVN_DATE='$Date$'
 VERSION=$(svn_date_to_version "${SVN_DATE}" )
 
-get_libname() {
+init_XVMC_vars() {
+	get_libname() {
 	[[ $(uname) == "Darwin" ]] \
 		&& echo ${1:+.}${1}.dylib \
 		|| echo .so${1:+.}${1}
-}
+	}
 
-XVMCLIBS=(
-"libXvMCNVIDIA_dynamic$(get_libname 1)"
-"libXvMC$(get_libname 1)"
-"libviaXvMC$(get_libname 1)"
-"libviaXvMCPro$(get_libname 1)"
-"libchromeXvMC$(get_libname 1)"
-"libchromeXvMCPro$(get_libname 1)"
-"libXvMCVIA$(get_libname)"
-"libXvMCVIAPro$(get_libname)"
-"libI810XvMC$(get_libname 1)"
-"/usr/lib/libIntelXvMC$(get_libname)"
-"libAMDXvBA$(get_libname 1)" )
-XVMCPRETTY=(
-"nvidia"
-"xorg-x11"
-"via"
-"via-pro"
-"openchrome"
-"openchrome-pro"
-"unichrome"
-"unichrome-pro"
-"intel-i810"
-"intel-i915/i965"
-"ati" )
+	XVMCLIBS=(
+		"libXvMCNVIDIA_dynamic$(get_libname 1)"
+		"libXvMC$(get_libname 1)"
+		"libviaXvMC$(get_libname 1)"
+		"libviaXvMCPro$(get_libname 1)"
+		"libchromeXvMC$(get_libname 1)"
+		"libchromeXvMCPro$(get_libname 1)"
+		"libXvMCVIA$(get_libname)"
+		"libXvMCVIAPro$(get_libname)"
+		"libI810XvMC$(get_libname 1)"
+		"/usr/lib/libIntelXvMC$(get_libname)"
+		"libAMDXvBA$(get_libname 1)"
+	)
+
+	XVMCPRETTY=(
+		"nvidia"
+		"xorg-x11"
+		"via"
+		"via-pro"
+		"openchrome"
+		"openchrome-pro"
+		"unichrome"
+		"unichrome-pro"
+		"intel-i810"
+		"intel-i915/i965"
+		"ati"
+	)
+}
 
 get_implementation_indices() {
 	local ret n
@@ -85,6 +90,7 @@ describe_list() {
 
 do_list() {
 	local output n
+	init_XVMC_vars
 	local avail=( $(get_implementation_indices) )
 	local current=$(get_current_implementation_index)
 	write_list_start \
@@ -109,6 +115,7 @@ describe_show() {
 }
 
 do_show() {
+	init_XVMC_vars
 	local current=$(get_current_implementation_index)
 	write_list_start "Current XvMC implementation:"
 
@@ -139,6 +146,7 @@ describe_set_options() {
 }
 
 do_set() {
+	init_XVMC_vars
 	local current=$(get_current_implementation_index)
 	local avail=( $(get_implementation_indices) )
 	local n new action
