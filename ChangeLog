@@ -1,3 +1,8 @@
+2013-03-11 Christoph Junghans <ottxor@gentoo.org>
+
+	* modules/xvmc.eselect: add myself as maintainer,
+	version bump to 0.4 for release
+
 2013-03-11  Ulrich Müller  <ulm@gentoo.org>
 
 	* modules/xvmc.eselect (get_libname): Use the OSTYPE bash variable
