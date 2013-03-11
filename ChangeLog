@@ -1,3 +1,8 @@
+2013-03-11  Ulrich Müller  <ulm@gentoo.org>
+
+	* modules/xvmc.eselect (get_libname): Use the OSTYPE bash variable
+	instead of calling uname -s.
+
 2013-03-10 Christoph Junghans <ottxor@gentoo.org>
 
 	* modules/xvmc.eselect: added changes from gx86

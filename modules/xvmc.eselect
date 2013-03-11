@@ -9,9 +9,10 @@ VERSION=$(svn_date_to_version "${SVN_DATE}" )
 
 init_XVMC_vars() {
 	get_libname() {
-		[[ $(uname) == "Darwin" ]] \
-			&& echo ${1:+.}${1}.dylib \
-			|| echo .so${1:+.}${1}
+		case ${OSTYPE} in
+			darwin*) echo ${1:+.}${1}.dylib ;;
+			*) echo .so${1:+.}${1} ;;
+		esac
 	}
 
 	XVMCLIBS=(
