@@ -7,29 +7,41 @@ MAINTAINER="cardoe@gentoo.org"
 SVN_DATE='$Date$'
 VERSION=$(svn_date_to_version "${SVN_DATE}" )
 
+get_libname() {
+	[[ $(uname) == "Darwin" ]] \
+		&& echo ${1:+.}${1}.dylib \
+		|| echo .so${1:+.}${1}
+}
+
 XVMCLIBS=(
-"libXvMCNVIDIA_dynamic.so.1"
-"libXvMC.so.1"
-"libviaXvMC.so.1"
-"libchromeXvMC.so.1"
-"libviaXvMCPro.so.1"
-"libchromeXvMCPro.so.1"
-"libI810XvMC.so.1"
-"libAMDXvBA.so.1" )
+"libXvMCNVIDIA_dynamic$(get_libname 1)"
+"libXvMC$(get_libname 1)"
+"libviaXvMC$(get_libname 1)"
+"libviaXvMCPro$(get_libname 1)"
+"libchromeXvMC$(get_libname 1)"
+"libchromeXvMCPro$(get_libname 1)"
+"libXvMCVIA$(get_libname)"
+"libXvMCVIAPro$(get_libname)"
+"libI810XvMC$(get_libname 1)"
+"/usr/lib/libIntelXvMC$(get_libname)"
+"libAMDXvBA$(get_libname 1)" )
 XVMCPRETTY=(
 "nvidia"
 "xorg-x11"
 "via"
-"openchrome"
 "via-pro"
+"openchrome"
 "openchrome-pro"
-"intel"
+"unichrome"
+"unichrome-pro"
+"intel-i810"
+"intel-i915/i965"
 "ati" )
 
 get_implementation_indices() {
 	local ret n
 	for (( n = 0; n < ${#XVMCLIBS[@]}; ++n )); do
-		[[ -e "${ROOT}/usr/lib/${XVMCLIBS[n]}" ]] && ret+=($n)
+		[[ -e "${EROOT}/usr/lib/${XVMCLIBS[n]##*/}" ]] && ret+=($n)
 	done
 
 	echo ${ret[@]}
@@ -37,8 +49,8 @@ get_implementation_indices() {
 
 get_current_implementation_index() {
 	local n
-	if [[ -f "${ROOT}/etc/X11/XvMCConfig" ]]; then
-		local current=$(< "${ROOT}/etc/X11/XvMCConfig")
+	if [[ -f "${EROOT}/etc/X11/XvMCConfig" ]]; then
+		local current=$(< "${EROOT}/etc/X11/XvMCConfig")
 		for (( n = 0; n < ${#XVMCLIBS[@]}; ++n )); do
 			if [[ "${XVMCLIBS[n]}" = "${current}" ]]; then
 				echo "${n}"
@@ -52,11 +64,11 @@ get_current_implementation_index() {
 
 set_new_implementation() {
 	echo -n "Switching to ${XVMCPRETTY[$1]} XvMC implementation..."
-	touch "${ROOT}/etc/X11/XvMCConfig" 2&>1 > /dev/null
+	touch "${EROOT}/etc/X11/XvMCConfig" 2>&1 > /dev/null
 	if [[ $? -eq 0 ]]; then
-		echo "${XVMCLIBS[$1]}" > "${ROOT}/etc/X11/XvMCConfig"
-		chmod 644 "${ROOT}/etc/X11/XvMCConfig"
-		chown 0:0 "${ROOT}/etc/X11/XvMCConfig"
+		echo "${XVMCLIBS[$1]}" > "${EROOT}/etc/X11/XvMCConfig"
+		chmod 644 "${EROOT}/etc/X11/XvMCConfig"
+		[[ ${EROOT} == "/" ]] && chown 0:0 "${EROOT}/etc/X11/XvMCConfig"
 		echo " done"
 	else
 		echo " failed!"
