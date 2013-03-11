@@ -29,14 +29,14 @@ XVMCPRETTY=(
 "openchrome-pro"
 "unichrome"
 "unichrome-pro"
-"intel-i815"
-"intel-i915"
+"intel-i810"
+"intel-i915/i965"
 "ati" )
 
 get_implementation_indices() {
 	local ret n
 	for (( n = 0; n < ${#XVMCLIBS[@]}; ++n )); do
-		[[ -e "${ROOT}/usr/lib/${XVMCLIBS[n]}" ]] && ret+=($n)
+		[[ -e "${ROOT}/usr/lib/${XVMCLIBS[n]##*/}" ]] && ret+=($n)
 	done
 
 	echo ${ret[@]}
