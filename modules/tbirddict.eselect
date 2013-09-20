@@ -2,7 +2,7 @@
 # Copyright 1999-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="Manage the configuration of dictionaries for Mozilla Thunderbird."
+DESCRIPTION="Manage the configuration of dictionaries for Mozilla Thunderbird"
 MAINTAINER="kevquinn@gentoo.org"
 SVN_DATE='$Date$'
 VERSION=$(svn_date_to_version "${SVN_DATE}" )

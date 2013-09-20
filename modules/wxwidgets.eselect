@@ -4,7 +4,7 @@
 
 inherit config
 
-DESCRIPTION="Manage the system default wxWidgets profile."
+DESCRIPTION="Manage the system default wxWidgets profile"
 MAINTAINER="wxwidgets@gentoo.org"
 SVN_DATE='$Date$'
 VERSION=$(svn_date_to_version "${SVN_DATE}")
