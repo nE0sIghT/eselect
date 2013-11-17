@@ -1,13 +1,12 @@
 # -*-eselect-*-  vim: ft=eselect
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 inherit config
 
 DESCRIPTION="Manage the system default wxWidgets profile"
 MAINTAINER="wxwidgets@gentoo.org"
-SVN_DATE='$Date$'
-VERSION=$(svn_date_to_version "${SVN_DATE}")
+VERSION="20131117"
 
 WXCONFFILE="${EROOT}"/var/lib/wxwidgets/current
 WXCONFDIR="${EROOT}"/usr/lib/wx/config
@@ -15,14 +14,13 @@ WXCONFDIR="${EROOT}"/usr/lib/wx/config
 find_targets() {
 	local conf
 	for conf in ${WXCONFDIR}/*; do
-		[[ -f ${conf} && -x ${conf} ]] && basename ${conf}
+		[[ -e ${conf} ]] && basename ${conf}
 	done
 }
 
 set_config() {
 	local target="${1}" targets
 
-	# selected by number
 	if is_number "${target}"; then
 		targets=( $(find_targets) )
 		[[ ${1} -ge 1 && ${1} -le ${#targets[@]} ]] \
@@ -30,12 +28,15 @@ set_config() {
 		target=${targets[$(( ${target} - 1 ))]}
 	fi
 
+	# we shouldn't change the profile to "none" if there are available configs
+	# this can happen if WXCONFFILE got deleted somehow
 	if [[ ${target} == "none" ]]; then
-		# none is a special case
-		:
-	else
-		[[ ! -f ${WXCONFDIR}/${target} ]] && \
-			die -q "\"${1}\" doesn't appear to be a valid profile name"
+		targets=( $(find_targets) )
+		[[ ${#targets[@]} -ge 1 ]] && target=${targets[0]}
+	fi
+
+	if [[ ! ${target} == "none" && ! -e ${WXCONFDIR}/${target} ]]; then
+		die -q "\"${1}\" doesn't appear to be a valid profile name"
 	fi
 
 	echo
@@ -90,7 +91,6 @@ describe_list() {
 
 do_list() {
 	local i targets currconf
-	# targets is an array containing names of available configs
 	targets=( $(find_targets) )
 	[[ -e ${WXCONFFILE} ]] && currconf=$(load_config ${WXCONFFILE} WXCONFIG)
 
@@ -110,7 +110,7 @@ describe_set() {
 }
 
 describe_set_options() {
-	echo "<target> : Profile name or number (from 'list' action)"
+	echo "<target> : Profile name or number (from 'list')"
 }
 
 describe_set_parameters() {
@@ -121,8 +121,8 @@ do_set() {
 	[[ ! ${#@} -eq 1 ]] \
 		&& die -q "You must specify a profile name or number"
 
-	[[ -w "${EROOT}"/var/lib ]] \
-		|| die -q "You need write permission to /var/lib to perform this action."
+	[[ ! -w "${EROOT}"/var/lib/ ]] \
+		&& die -q "You need write permission to /var/lib to perform this action."
 
 	set_config "${1}"
 }
@@ -135,9 +135,6 @@ do_update() {
 	[[ ! -e ${WXCONFFILE} ]] && do_set none
 
 	currconf=$(load_config ${WXCONFFILE} WXCONFIG)
-
-	# if current config is "none" leave it alone
-	[[ ${currconf} == none ]] && return 0
 
 	# if current config is valid leave it alone
 	[[ -e ${WXCONFDIR}/${currconf} ]] && return 0
@@ -202,7 +199,7 @@ do_update() {
 				;;
 
 			ver)
-				for opt in 2.9 2.8 2.6; do
+				for opt in 2.9 2.8; do
 					if [[ ${opt} == ${wxver[0]} ]]; then
 						continue
 					else
@@ -216,11 +213,10 @@ do_update() {
 
 	# Now we iterate through all the installed configs and find the closest match
 	# ( debug -> char -> toolkit -> ver )
-	# meaning w/ a current config of gtk2-unicode-debug-2.6, it will pick
-	# gtk2-unicode-release-2.6 before
-	# gtk2-ansi-debug-2.6 before
-	# base-unicode-debug-2.6 before
-	# gtk2-unicode-debug-2.8
+	# meaning w/ a current config of gtk2-unicode-debug-2.8, it will pick
+	# gtk2-unicode-release-2.8 before
+	# base-unicode-debug-2.8 before
+	# gtk2-unicode-2.9
 
 	local d c t v checkconf foundconf
 
@@ -228,7 +224,7 @@ do_update() {
 		for (( t = 0 ; t < ${#wxtoolkit[@]} ; t++ )); do
 			for (( c = 0 ; c < ${#wxchar[@]} ; c++ )); do
 				for (( d = 0 ; d < ${#wxdebug[@]} ; d++ )); do
-					if [[ ${wxver[$v]} != 2.[6,8] ]]; then
+					if [[ ${wxver[$v]} != 2.8 ]]; then
 						# >=2.9 doesn't have a debug component
 						checkconf="${wxtoolkit[$t]}-${wxchar[$c]}-${wxver[$v]}"
 					else
@@ -245,12 +241,14 @@ do_update() {
 	# nothing installed
 	[[ -z ${foundconf} ]] && foundconf="none"
 
-	echo
-	write_warning_msg "Your currently selected wxWidgets profile:    ( ${currconf} )"
-	write_warning_msg "is no longer available."
-	write_warning_msg
-	write_warning_msg "The closest matching profile:                 ( ${foundconf} )"
-	write_warning_msg "will be activated in its place."
+	if [[ ${currconf} != "none" && ${foundconf} != "none" ]]; then
+		echo
+		write_warning_msg "Your currently selected wxWidgets profile:    ( ${currconf} )"
+		write_warning_msg "is no longer available."
+		write_warning_msg
+		write_warning_msg "The closest matching profile:                 ( ${foundconf} )"
+		write_warning_msg "will be activated in its place."
+	fi
 
 	do_set ${foundconf}
 }
