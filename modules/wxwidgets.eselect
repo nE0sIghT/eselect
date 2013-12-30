@@ -6,7 +6,7 @@ inherit config
 
 DESCRIPTION="Manage the system default wxWidgets profile"
 MAINTAINER="wxwidgets@gentoo.org"
-VERSION="20131117"
+VERSION="20131230"
 
 WXCONFFILE="${EROOT}"/var/lib/wxwidgets/current
 WXCONFDIR="${EROOT}"/usr/lib/wx/config
@@ -27,7 +27,6 @@ set_config() {
 			|| die -q "Number out of range: ${1}"
 		target=${targets[$(( ${target} - 1 ))]}
 	fi
-
 	# we shouldn't change the profile to "none" if there are available configs
 	# this can happen if WXCONFFILE got deleted somehow
 	if [[ ${target} == "none" ]]; then
@@ -199,7 +198,7 @@ do_update() {
 				;;
 
 			ver)
-				for opt in 2.9 2.8; do
+				for opt in 3.0 2.9 2.8; do
 					if [[ ${opt} == ${wxver[0]} ]]; then
 						continue
 					else
