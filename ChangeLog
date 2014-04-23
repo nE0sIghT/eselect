@@ -1,3 +1,7 @@
+2014-04-23 Christoph Junghans <ottxor@gentoo.org>
+
+	* modules/wxwidgets.eselect: add prefix (mac) support (bug #508438)
+
 2013-03-11 Christoph Junghans <ottxor@gentoo.org>
 
 	* modules/xvmc.eselect: add myself as maintainer,

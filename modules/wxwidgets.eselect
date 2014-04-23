@@ -1,12 +1,12 @@
 # -*-eselect-*-  vim: ft=eselect
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 inherit config
 
 DESCRIPTION="Manage the system default wxWidgets profile"
 MAINTAINER="wxwidgets@gentoo.org"
-VERSION="20131230"
+VERSION="20140423"
 
 WXCONFFILE="${EROOT}"/var/lib/wxwidgets/current
 WXCONFDIR="${EROOT}"/usr/lib/wx/config
@@ -165,7 +165,7 @@ do_update() {
 		i=1
 		case ${component} in
 			toolkit)
-				for opt in base gtk2; do
+				for opt in base gtk2 mac; do
 					if [[ ${opt} == ${wxtoolkit[0]} ]]; then
 						continue
 					else
