@@ -1,3 +1,7 @@
+2014-11-22 Ben de Groot <yngwin@gentoo.org>
+
+	* modules/vi.eselect: apply patch from 1.1.7-r1
+
 2014-04-23 Christoph Junghans <ottxor@gentoo.org>
 
 	* modules/wxwidgets.eselect: add prefix (mac) support (bug #508438)
