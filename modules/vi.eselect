@@ -1,11 +1,10 @@
 # -*-eselect-*-  vim: ft=eselect
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Manage /usr/bin/vi implementations"
 MAINTAINER="vim@gentoo.org"
-SVN_DATE='$Date$'
-VERSION=$(svn_date_to_version "${SVN_DATE}" )
+VERSION="1.1.8"
 
 # find a list of vi symlink targets, best first
 find_targets() {
@@ -16,6 +15,7 @@ find_targets() {
 			"${EROOT}"/usr/bin/elvis \
 			"${EROOT}"/usr/bin/vile \
 			"${EROOT}"/usr/bin/gvim \
+			"${EROOT}"/usr/bin/qvim \
 			"${EROOT}"/usr/bin/xvile \
 			"${EROOT}"/bin/busybox \
 		; do

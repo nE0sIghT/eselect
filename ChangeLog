@@ -1,6 +1,7 @@
 2014-11-22 Ben de Groot <yngwin@gentoo.org>
 
 	* modules/vi.eselect: apply patch from 1.1.7-r1
+	* modules/vi.eselect: add qvim as option (bug #529528)
 
 2014-04-23 Christoph Junghans <ottxor@gentoo.org>
 
