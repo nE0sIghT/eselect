@@ -17,7 +17,7 @@ DESCRIPTION="Manage the OpenGL implementation used by your system"
 MAINTAINER="x11@gentoo.org"
 SVN_DATE='$Date$'
 VERSION=$(svn_date_to_version "${SVN_DATE}" )
-EBUILD_VERSION="1.3.0"
+EBUILD_VERSION="1.3.1"
 
 # Our data
 ENV_FILE="${EROOT}/etc/env.d/000opengl"
@@ -143,6 +143,7 @@ set_new_implementation() {
 	store_config ${ENV_FILE} LDPATH "${ldpath}"
 	store_config ${ENV_FILE} OPENGL_PROFILE "${gl_implem}"
 
+	mkdir -p "${XORGD_FILE%/*}" || die
 	write_xorg_confd "${xorgmodpath[@]}" >${XORGD_FILE}
 
 	do_action env update &> /dev/null
