@@ -66,11 +66,13 @@ get_implementations() {
 # outputs the file contents to stderr
 write_xorg_confd() {
 	local dir
-	echo 'Section "Files"'
-	for dir; do
-		echo "	ModulePath \"${dir}\""
-	done
-	echo 'EndSection'
+	if [[ -n ${@} ]]; then
+		echo 'Section "Files"'
+		for dir; do
+			echo "	ModulePath \"${dir}\""
+		done
+		echo 'EndSection'
+	fi
 }
 
 set_new_implementation() {
