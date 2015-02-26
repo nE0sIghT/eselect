@@ -1,16 +1,17 @@
 # -*-eselect-*-  vim: ft=eselect
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Manage /usr/bin/vi implementations"
 MAINTAINER="vim@gentoo.org"
-VERSION="1.1.8"
+VERSION="1.1.9"
 
 # find a list of vi symlink targets, best first
 find_targets() {
 	local f
 	for f in \
 			"${EROOT}"/usr/bin/vim \
+			"${EROOT}"/usr/bin/nvim \
 			"${EROOT}"/usr/bin/nvi \
 			"${EROOT}"/usr/bin/elvis \
 			"${EROOT}"/usr/bin/vile \
